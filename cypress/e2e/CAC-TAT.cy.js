@@ -13,8 +13,11 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#lastName').type('Targino');
     cy.get('#email').type('rafael@targino.com');
     cy.get('#open-text-area').type('Me dá 1 real', { delay: 0 });
+    cy.clock();
     cy.contains('.button', 'Enviar').click();
     cy.get('.success').should('be.visible');
+    cy.tick(3000);
+    cy.get('.success').should('not.be.visible');
   });
 
   it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
@@ -22,8 +25,11 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#lastName').type('Targino');
     cy.get('#email').type('rafael.targino.com');
     cy.get('#open-text-area').type('Me dá 1 real', { delay: 0 });
+    cy.clock();
     cy.contains('.button', 'Enviar').click();
     cy.get('.error').should('be.visible');
+    cy.tick(3000);
+    cy.get('.error').should('not.be.visible');
   });
 
   it('campo de telefone só aceita números', () => {
@@ -35,6 +41,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   });
 
   it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+    cy.clock();
     cy.get('#firstName').type('Rafael');
     cy.get('#lastName').type('Targino');
     cy.get('#email').type('rafael@targino.com');
@@ -42,6 +49,8 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#phone-checkbox').check();
     cy.contains('.button', 'Enviar').click();
     cy.get('.error').should('be.visible');
+    cy.tick(3000);
+    cy.get('.error').should('not.be.visible');
   });
 
   it('preenche e limpa os campos nome, sobrenome, email e telefone', () => {
@@ -68,13 +77,19 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   });
 
   it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
+    cy.clock()
     cy.contains('.button', 'Enviar').click();
     cy.get('.error').should('be.visible');
+    cy.tick(3000);
+    cy.get('.error').should('not.be.visible');
   });
 
   it('envia o formuário com sucesso usando um comando customizado', () => {
+    cy.clock();
     cy.fillMandatoryFieldsAndSubmit('Rafael', 'Targino', 'rafael@targino.com', 'Me dá 1 real');
     cy.verifySuccessMessageIsVisible();
+    cy.tick(3000);
+    cy.get('.success').should('not.be.visible');
   });
 
   context('formas de interagir com campo de seleção suspensa', () => {
